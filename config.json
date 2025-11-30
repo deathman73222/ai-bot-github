@@ -1,0 +1,70 @@
+{
+    "app": {
+        "name": "AI Bot",
+        "version": "1.0.0",
+        "description": "Hybrid Search Engine - Online + Offline",
+        "author": "AI Bot Community",
+        "license": "MIT"
+    },
+    "search": {
+        "default_mode": "hybrid",
+        "modes": [
+            "hybrid",
+            "online",
+            "offline"
+        ],
+        "cache_enabled": true,
+        "cache_size_mb": 100,
+        "timeout_seconds": 10,
+        "max_history": 1000
+    },
+    "online": {
+        "provider": "duckduckgo",
+        "enabled": true,
+        "api_url": "https://api.duckduckgo.com/",
+        "timeout": 10,
+        "retry_count": 3,
+        "user_agent": "AI-Bot/1.0"
+    },
+    "offline": {
+        "provider": "wikipedia_sqlite",
+        "enabled": true,
+        "data_directory": "data/wikipedia",
+        "database_file": "data/wikipedia/wikipedia.db",
+        "auto_initialize": true,
+        "sample_data_enabled": true
+    },
+    "gui": {
+        "theme": "default",
+        "window_width": 1200,
+        "window_height": 700,
+        "start_minimized": false,
+        "dark_mode": false,
+        "show_metadata": true,
+        "font_size": 10
+    },
+    "logging": {
+        "enabled": false,
+        "level": "INFO",
+        "file": "logs/ai_bot.log",
+        "max_size_mb": 10
+    },
+    "performance": {
+        "preload_database": true,
+        "cache_searches": true,
+        "background_sync": false,
+        "multithreading": true
+    },
+    "data_paths": {
+        "wikipedia_data": "data/wikipedia",
+        "cache_dir": "data/cache",
+        "history_file": "data/search_history.json",
+        "config_file": "config.json"
+    },
+    "advanced": {
+        "enable_voice_input": false,
+        "enable_ai_summarization": false,
+        "custom_plugins": [],
+        "debug_mode": false
+    }
+}

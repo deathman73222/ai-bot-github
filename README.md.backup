@@ -1,0 +1,301 @@
+# AI Bot - Hybrid Search Engine
+
+A powerful desktop application that combines **online web search** with **offline Wikipedia functionality** for free, unrestricted access to information.
+
+## Features
+
+✅ **Hybrid Search Mode** - Automatically switches between online and offline sources
+✅ **Online Search** - Uses DuckDuckGo API (completely free, no API key needed)
+✅ **Offline Wikipedia** - Works without internet using local Wikipedia dumps
+✅ **Desktop GUI** - User-friendly PyQt5 interface
+✅ **Search History** - Keeps track of recent queries
+✅ **Multiple Modes** - Switch between Hybrid, Online-only, and Offline-only modes
+✅ **No Subscriptions** - Completely free and open-source
+
+## System Requirements
+
+- **Python**: 3.7 or higher
+- **RAM**: Minimum 2GB (more if using large Wikipedia dumps)
+- **Disk Space**: 500MB+ (depends on Wikipedia data size)
+- **OS**: Windows, macOS, or Linux
+
+## Installation
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/deathman73222/ai-bot-github.git
+cd ai-bot-github
+```
+
+### Step 2: Create a Virtual Environment (Recommended)
+
+**On Windows (PowerShell):**
+```powershell
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+
+**On macOS/Linux:**
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+### Step 3: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+This will install:
+- `requests` - For HTTP requests to DuckDuckGo
+- `PyQt5` - For the desktop GUI
+- `wikipedia-api` - Optional, for future enhancements
+
+### Step 4: Run the Application
+
+```bash
+python run_ai_bot.py
+```
+
+Or if you installed it as a package:
+```bash
+ai-bot
+```
+
+## Quick Start Guide
+
+### 1. **First Launch**
+- The application will automatically create a local Wikipedia database with sample articles
+- Check the status bar to see "📚 Wikipedia Offline: X articles"
+
+### 2. **Search Modes**
+
+#### Hybrid Mode (Default)
+- Automatically tries online search first
+- Falls back to offline Wikipedia if no internet connection
+- **Best for**: Maximum reliability and speed
+
+#### Online Only
+- Only searches the internet via DuckDuckGo
+- Requires active internet connection
+- **Best for**: Current events and latest information
+
+#### Offline Only
+- Only searches local Wikipedia data
+- Works without internet
+- **Best for**: Guaranteed availability and privacy
+
+### 3. **Using the Application**
+
+1. **Enter a query** in the search box (e.g., "Python programming", "Artificial Intelligence")
+2. **Click Search** or press Enter
+3. **View results** on the right panel
+4. **Check history** in the left panel to revisit previous searches
+5. **Switch modes** using the dropdown at the top
+
+## Setting Up Offline Wikipedia Data
+
+### Option A: Use Sample Data (Included)
+The application comes with sample Wikipedia articles for testing. No additional setup needed!
+
+### Option B: Download Full Wikipedia Dump (Optional)
+
+To use a larger offline Wikipedia database:
+
+1. Download a Wikipedia dump from: https://dumps.wikimedia.org/enwiki/
+   - Look for files like: `enwiki-YYYYMMDD-pages-articles.xml.bz2`
+
+2. Convert it to JSON format using tools like:
+   - https://github.com/5j9/wptools
+   - https://github.com/attardi/wikiextractor
+
+3. Place the JSON file in: `data/wikipedia/`
+
+4. The app will automatically load it on next launch
+
+## Architecture
+
+```
+ai-bot-github/
+├── ai_bot/
+│   ├── core/
+│   │   └── ai_engine.py          # Main AI logic and query routing
+│   ├── modules/
+│   │   ├── web_search.py         # DuckDuckGo search integration
+│   │   └── wikipedia_offline.py  # Local Wikipedia database
+│   └── gui/
+│       └── main_window.py        # PyQt5 user interface
+├── data/
+│   └── wikipedia/
+│       └── wikipedia.db          # Local SQLite database
+├── run_ai_bot.py                 # Application entry point
+├── requirements.txt              # Python dependencies
+├── setup.py                      # Package setup
+└── README.md                     # This file
+```
+
+## How It Works
+
+### Query Processing Flow
+
+```
+User Query
+    ↓
+AI Engine (core/ai_engine.py)
+    ↓
+Mode Selection
+    ├─ Hybrid Mode ──→ Try Web Search → Fallback to Offline
+    ├─ Online Mode ──→ Web Search Only
+    └─ Offline Mode ──→ Offline Only
+    ↓
+Result Cache & History
+    ↓
+Display in GUI
+```
+
+## Features Explained
+
+### Web Search (DuckDuckGo)
+- **Advantage**: Free, no API key required, no rate limiting
+- **Limitation**: Requires internet connection
+- **Data**: Real-time web results
+
+### Offline Wikipedia
+- **Advantage**: Works without internet, fast responses
+- **Limitation**: Static data (not real-time)
+- **Data**: Local SQLite database
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|----------|--------|
+| `Enter` | Search |
+| `Ctrl+A` | Select all in search box |
+| `Ctrl+L` | Focus search box |
+
+## Troubleshooting
+
+### "No module named 'PyQt5'"
+```bash
+pip install PyQt5
+```
+
+### "No internet connection" error in Online mode
+- Check your internet connection
+- Switch to Offline mode to use local Wikipedia data
+- Or use Hybrid mode to automatically fallback
+
+### Application won't start
+1. Verify Python 3.7+ is installed: `python --version`
+2. Activate your virtual environment
+3. Reinstall requirements: `pip install -r requirements.txt --force-reinstall`
+
+### Wikipedia database corrupted
+Delete `data/wikipedia/wikipedia.db` and restart the application. It will recreate it.
+
+## Configuration
+
+### Environment Variables
+
+```bash
+# Optional: Set custom Wikipedia data directory
+set WIKI_DATA_PATH=C:\path\to\wikipedia\data
+
+# Optional: Enable debug logging
+set AI_BOT_DEBUG=true
+```
+
+## Development
+
+### Adding Custom Search Sources
+
+Edit `ai_bot/core/ai_engine.py` and add new search methods:
+
+```python
+def _custom_search(self, query, custom_search_func, result):
+    # Your custom search logic
+    pass
+```
+
+### Extending the GUI
+
+Edit `ai_bot/gui/main_window.py` to add:
+- New buttons/controls
+- Custom result formatting
+- Additional views
+
+## Performance Tips
+
+1. **Cache Results**: The app automatically caches results to avoid redundant searches
+2. **Optimize Wikipedia DB**: Regularly clean up `data/wikipedia/wikipedia.db` for faster searches
+3. **Use Offline Mode**: When offline mode is active without internet, response times are faster
+
+## Security & Privacy
+
+✅ **No Data Collection**: All searches are processed locally or through DuckDuckGo
+✅ **No Accounts**: Doesn't require login or registration
+✅ **Open Source**: Full source code transparency
+✅ **Offline Available**: Can run completely offline with local Wikipedia data
+
+## API Limits
+
+- **DuckDuckGo**: No official rate limit, but be respectful (1-2 seconds between requests)
+- **Wikipedia**: Local database has no limits
+
+## License
+
+MIT License - See LICENSE file for details
+
+## Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## Support & Issues
+
+- **Report bugs**: GitHub Issues
+- **Feature requests**: GitHub Discussions
+- **Questions**: Check README or GitHub Issues first
+
+## Roadmap
+
+- [ ] Add voice input support
+- [ ] Implement result summarization with AI
+- [ ] Add more offline data sources
+- [ ] Create mobile version
+- [ ] Add multilingual support
+- [ ] Implement custom search plugins
+
+## Future Enhancements
+
+1. **AI Summarization** - Use local LLMs like Ollama for intelligent summaries
+2. **Voice Interface** - Talk to your AI bot
+3. **Custom Knowledge Base** - Add your own documents
+4. **Export Results** - Save searches as PDF/Word
+5. **Dark Mode** - Eye-friendly interface option
+
+## FAQ
+
+**Q: Is this AI actually intelligent?**
+A: This app focuses on fast information retrieval. For conversational AI, consider integrating Ollama or other local LLMs.
+
+**Q: Can I use this commercially?**
+A: Yes, under MIT license. Just include the license file.
+
+**Q: How do I update Wikipedia data?**
+A: Download a new Wikipedia dump and place it in `data/wikipedia/`. The app will use it.
+
+**Q: Does it work on macOS/Linux?**
+A: Yes! It's built with cross-platform Python libraries.
+
+---
+
+**Made with ❤️ by AI Bot Community**
+
+Version: 1.0.0
+Last Updated: November 2025
